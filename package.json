@@ -1,8 +1,9 @@
 {
-  "name": "@enis.gegic/react-native-draggable-flatlist",
+  "name": "react-native-draggable-flatlist",
   "version": "4.0.1",
   "description": "A drag-and-drop-enabled FlatList component for React Native",
-  "main": "src/index.tsx",
+  "main": "lib/commonjs/index",
+  "module": "lib/module/index",
   "react-native": "src/index.tsx",
   "types": "lib/typescript/index.d.ts",
   "scripts": {
@@ -17,7 +18,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/computerjazz/react-native-draggable-flatlist.git"
+    "url": "git+https://github.com/enisit/react-native-draggable-flatlist"
   },
   "keywords": [
     "react-native",
@@ -32,7 +33,7 @@
   "author": "Daniel Merrill",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/computerjazz/react-native-draggable-flatlist/issues"
+    "url": "https://github.com/enisit/react-native-draggable-flatlist/issues"
   },
   "jest": {
     "preset": "react-native",
@@ -45,7 +46,7 @@
     },
     "transformIgnorePatterns": []
   },
-  "homepage": "https://github.com/computerjazz/react-native-draggable-flatlist#readme",
+  "homepage": "https://github.com/enisit/react-native-draggable-flatlist#readme",
   "peerDependencies": {
     "react-native": ">=0.64.0",
     "react-native-gesture-handler": ">=2.0.0",
