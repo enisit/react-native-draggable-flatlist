@@ -1,9 +1,8 @@
 {
-  "name": "react-native-draggable-flatlist",
+  "name": "@enis.gegic/react-native-draggable-flatlist",
   "version": "4.0.1",
   "description": "A drag-and-drop-enabled FlatList component for React Native",
-  "main": "lib/commonjs/index",
-  "module": "lib/module/index",
+  "main": "src/index.tsx",
   "react-native": "src/index.tsx",
   "types": "lib/typescript/index.d.ts",
   "scripts": {
