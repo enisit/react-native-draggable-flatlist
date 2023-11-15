@@ -1,7 +1,14 @@
 import React from "react";
-import { LayoutChangeEvent, ScrollViewProps } from "react-native";
+import {
+  LayoutChangeEvent,
+  NativeScrollEvent,
+  ScrollViewProps,
+} from "react-native";
 import { ScrollView } from "react-native-gesture-handler";
-import Animated, { useAnimatedScrollHandler } from "react-native-reanimated";
+import Animated, {
+  runOnJS,
+  useAnimatedScrollHandler,
+} from "react-native-reanimated";
 import {
   NestableScrollContainerProvider,
   useSafeNestableScrollContainerContext,
@@ -9,8 +16,23 @@ import {
 import { useStableCallback } from "../hooks/useStableCallback";
 
 const AnimatedScrollView = Animated.createAnimatedComponent(ScrollView);
-
-function NestableScrollContainerInner(props: ScrollViewProps) {
+const isCloseToBottom = ({
+  layoutMeasurement,
+  contentOffset,
+  contentSize,
+}: NativeScrollEvent) => {
+  const paddingToBottom = 20;
+  return (
+    layoutMeasurement.height + contentOffset.y >=
+    contentSize.height - paddingToBottom
+  );
+};
+type NestableScrollContainerInnerProps = {
+  onEndReached?: () => void;
+} & ScrollViewProps;
+function NestableScrollContainerInner(
+  props: NestableScrollContainerInnerProps
+) {
   const {
     outerScrollOffset,
     containerSize,
@@ -18,10 +40,17 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
     scrollableRef,
     outerScrollEnabled,
   } = useSafeNestableScrollContainerContext();
+  console.log("From nesatable scroll");
+  const handleEndReached = useStableCallback(() => {
+    props.onEndReached?.();
+  });
 
-  const onScroll = useAnimatedScrollHandler({
-    onScroll: ({ contentOffset }) => {
-      outerScrollOffset.value = contentOffset.y;
+  const scrollHandler = useAnimatedScrollHandler({
+    onScroll: (scrollProps) => {
+      outerScrollOffset.value = scrollProps.contentOffset.y;
+      if (isCloseToBottom(scrollProps)) {
+        runOnJS(handleEndReached)();
+      }
     },
   });
 
@@ -45,13 +74,16 @@ function NestableScrollContainerInner(props: ScrollViewProps) {
       scrollEnabled={outerScrollEnabled}
       ref={scrollableRef}
       scrollEventThrottle={1}
-      onScroll={onScroll}
+      onScroll={scrollHandler}
     />
   );
 }
 
 export const NestableScrollContainer = React.forwardRef(
-  (props: ScrollViewProps, forwardedRef?: React.ForwardedRef<ScrollView>) => {
+  (
+    props: NestableScrollContainerInnerProps,
+    forwardedRef?: React.ForwardedRef<ScrollView>
+  ) => {
     return (
       <NestableScrollContainerProvider
         forwardedRef={
