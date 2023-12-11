@@ -40,7 +40,6 @@ function NestableScrollContainerInner(
     scrollableRef,
     outerScrollEnabled,
   } = useSafeNestableScrollContainerContext();
-  console.log("From nesatable scroll");
   const handleEndReached = useStableCallback(() => {
     props.onEndReached?.();
   });
